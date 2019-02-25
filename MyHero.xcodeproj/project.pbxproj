@@ -12,6 +12,9 @@
 		767CC8C5221E381000C911A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 767CC8C3221E381000C911A8 /* Main.storyboard */; };
 		767CC8C7221E381100C911A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 767CC8C6221E381100C911A8 /* Assets.xcassets */; };
 		767CC8CA221E381100C911A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 767CC8C8221E381100C911A8 /* LaunchScreen.storyboard */; };
+		96991F8322224C5E00A57BBB /* FightBossController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96991F8222224C5E00A57BBB /* FightBossController.swift */; };
+		96991F8522224E0600A57BBB /* StoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96991F8422224E0600A57BBB /* StoreController.swift */; };
+		B42F018224FA428547DD2333 /* Pods_MyHero.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7884B5D13F518584B438480 /* Pods_MyHero.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +25,12 @@
 		767CC8C6221E381100C911A8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		767CC8C9221E381100C911A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		767CC8CB221E381100C911A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		96991F8222224C5E00A57BBB /* FightBossController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FightBossController.swift; sourceTree = "<group>"; };
+		96991F8422224E0600A57BBB /* StoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreController.swift; sourceTree = "<group>"; };
+		96A8BCAB2222F6FE002D3F16 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
+		A7884B5D13F518584B438480 /* Pods_MyHero.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyHero.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DF3E24B7BB2CA9D092340452 /* Pods-MyHero.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyHero.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyHero/Pods-MyHero.release.xcconfig"; sourceTree = "<group>"; };
+		EBF46FDCA0062F534DB2AE10 /* Pods-MyHero.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyHero.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyHero/Pods-MyHero.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +38,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B42F018224FA428547DD2333 /* Pods_MyHero.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		121AC832130F96D12BA48105 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EBF46FDCA0062F534DB2AE10 /* Pods-MyHero.debug.xcconfig */,
+				DF3E24B7BB2CA9D092340452 /* Pods-MyHero.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		767CC8B3221E381000C911A8 = {
 			isa = PBXGroup;
 			children = (
 				767CC8BE221E381000C911A8 /* MyHero */,
 				767CC8BD221E381000C911A8 /* Products */,
+				121AC832130F96D12BA48105 /* Pods */,
+				F82C18C3446168790EA49BBF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,14 +75,41 @@
 		767CC8BE221E381000C911A8 /* MyHero */ = {
 			isa = PBXGroup;
 			children = (
+				96A8BCAB2222F6FE002D3F16 /* Header.h */,
 				767CC8BF221E381000C911A8 /* AppDelegate.swift */,
-				767CC8C1221E381000C911A8 /* ViewController.swift */,
-				767CC8C3221E381000C911A8 /* Main.storyboard */,
+				96A8BCA92222D951002D3F16 /* Controllers */,
+				96A8BCAA2222D97B002D3F16 /* Views */,
 				767CC8C6221E381100C911A8 /* Assets.xcassets */,
 				767CC8C8221E381100C911A8 /* LaunchScreen.storyboard */,
 				767CC8CB221E381100C911A8 /* Info.plist */,
 			);
 			path = MyHero;
+			sourceTree = "<group>";
+		};
+		96A8BCA92222D951002D3F16 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				96991F8422224E0600A57BBB /* StoreController.swift */,
+				96991F8222224C5E00A57BBB /* FightBossController.swift */,
+				767CC8C1221E381000C911A8 /* ViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		96A8BCAA2222D97B002D3F16 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				767CC8C3221E381000C911A8 /* Main.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F82C18C3446168790EA49BBF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A7884B5D13F518584B438480 /* Pods_MyHero.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,9 +119,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 767CC8CE221E381100C911A8 /* Build configuration list for PBXNativeTarget "MyHero" */;
 			buildPhases = (
+				EDACC7DF08F07389B8FE0CC5 /* [CP] Check Pods Manifest.lock */,
 				767CC8B8221E381000C911A8 /* Sources */,
 				767CC8B9221E381000C911A8 /* Frameworks */,
 				767CC8BA221E381000C911A8 /* Resources */,
+				EB2C126EF6BB7A058AF0FAED /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -130,13 +180,62 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		EB2C126EF6BB7A058AF0FAED /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-MyHero/Pods-MyHero-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/ProgressHUD/ProgressHUD.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProgressHUD.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MyHero/Pods-MyHero-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EDACC7DF08F07389B8FE0CC5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MyHero-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		767CC8B8221E381000C911A8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				767CC8C2221E381000C911A8 /* ViewController.swift in Sources */,
+				96991F8322224C5E00A57BBB /* FightBossController.swift in Sources */,
 				767CC8C0221E381000C911A8 /* AppDelegate.swift in Sources */,
+				96991F8522224E0600A57BBB /* StoreController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,6 +379,7 @@
 		};
 		767CC8CF221E381100C911A8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EBF46FDCA0062F534DB2AE10 /* Pods-MyHero.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -298,6 +398,7 @@
 		};
 		767CC8D0221E381100C911A8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DF3E24B7BB2CA9D092340452 /* Pods-MyHero.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

@@ -21,10 +21,44 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="w9g-fR-Lvo"/>
+                    <connections>
+                        <segue destination="XpW-wf-OMa" kind="show" identifier="goToBoss" id="Vwx-Ev-J61"/>
+                        <segue destination="Et0-9y-PlT" kind="show" identifier="goToStore" id="Fpg-Rc-9pf"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="882" y="-564"/>
+        </scene>
+        <!--Fight Boss Controller-->
+        <scene sceneID="ikV-tX-ikV">
+            <objects>
+                <viewController id="XpW-wf-OMa" customClass="FightBossController" customModule="MyHero" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="oME-fa-NBr">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="PTu-hh-9ID"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4SU-hQ-ZIt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1684" y="-141"/>
+        </scene>
+        <!--Store Controller-->
+        <scene sceneID="SG6-Ri-lZW">
+            <objects>
+                <viewController id="Et0-9y-PlT" customClass="StoreController" customModule="MyHero" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="iYV-q8-9fV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="zpo-f3-4Tw"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HdZ-df-Gxo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1684" y="-852"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="0kb-Sy-RFg">
