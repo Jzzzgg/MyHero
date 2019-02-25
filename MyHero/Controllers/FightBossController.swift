@@ -19,21 +19,27 @@ class FightBossController: UIViewController {
 
     
     private var boss_image = UIImageView.init()
-    var delegate : fight?
+     var delegate : fight?
     var hero_Heath : Int = 0
     var hero_Attack : Int = 0
     var hero_Strength : Double = 0.0
     var hero_Ailge : Double = 0.0
-    var level_Value : Int = 0
+    var level_Value : Int = 1
     var chance_Value : Int = 0
-    var num : Double = 0.0
+    private var boss_Heath : Double = 0
+    private var boss_Attack : Double = 0
+    private var boss_Damage = 0.0
+    private var hero_Damage = 0.0
     
+    private var boss_bar = UIProgressView.init()
+    private var hero_bar = UIProgressView.init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setting()
+        
         boss_Image_function()
-        fighting_Process()
+        setting()
+        progress_Start()
         // Do any additional setup after loading the view.
     }
     
@@ -63,6 +69,19 @@ class FightBossController: UIViewController {
         boss_image.frame = CGRect(x: halfWidth-oneOfThridWidth/2, y: oneOfFiftyHeight, width: oneOfThridWidth, height: oneOfFiftyHeight)
         boss_image.contentMode = .scaleAspectFit
         view.addSubview(boss_image)
+        
+        boss_bar = UIProgressView.init(frame: CGRect(x: halfWidth-oneOfThridWidth/2, y: oneOfFiftyHeight*2 + 10, width: oneOfThridWidth, height: 20))
+        boss_bar.setProgress(0.0, animated: true)
+        hero_Damage = Double(hero_Attack) * hero_Ailge
+        view.addSubview(boss_bar)
+        
+        hero_bar = UIProgressView.init(frame: CGRect(x: halfWidth-oneOfThridWidth/2, y: oneOfFiftyHeight*4 + 10, width: oneOfThridWidth, height: 20))
+        hero_bar.setProgress(0.0, animated: true)
+        boss_Damage = boss_Attack
+        view.addSubview(hero_bar)
+        
+        
+        perform(#selector(progress_Update), with: nil, afterDelay: 1.0)
     }
     
     func boss_Image_function(){
@@ -70,8 +89,12 @@ class FightBossController: UIViewController {
         let random_num = Int.random(in: 0...100)
         if random_num > 85{
             boss_image.image = UIImage(named: "boss1.png")
+            boss_Heath = Double(50+(level_Value * 120 ))
+            boss_Attack = ((0.4 * Double(level_Value))*10)+10
         }else{
             boss_image.image = UIImage(named: "boss.png")
+            boss_Heath = Double(50+(level_Value * 90 ))
+            boss_Attack = ((0.2 * Double(level_Value))*10)+10
         }
     }
     func setValue(_ heath: Int, _ attack: Int, _ strength: Double, _ ailge: Double, _ level: Int, _ chance: Int ){
@@ -83,28 +106,62 @@ class FightBossController: UIViewController {
         level_Value = level
         chance_Value = chance
     }
-    func fighting_Process(){
+    func progress_Start(){
+        
+        
+        
+        
+        
+    }
+    @objc func progress_Update(){
+        
         
         let total_Heath = (Double(hero_Heath) * hero_Strength)
         let total_Attack = (Double(hero_Attack) * hero_Ailge)
-        let boss_Heath = Double(50+(level_Value * 90 ))
-        let boss_Attack = ((0.2 * Double(level_Value)+1)*10)
-        let hero_Heath_Value =  total_Heath / boss_Attack
-        let boss_Heath_Value = boss_Heath / total_Attack
+//        let hero_Heath_Value =  total_Heath / boss_Attack
+//        let boss_Heath_Value = boss_Heath / total_Attack
+        boss_Damage = boss_Damage + boss_Attack
+        hero_Damage = hero_Damage + total_Attack
         
-        if boss_Heath_Value > hero_Heath_Value{
-            ProgressHUD.showError("You lose!")
+        boss_bar.progress = Float((hero_Damage) / boss_Heath)
+        hero_bar.progress = Float(boss_Damage/total_Heath)
+        
+        if (boss_Damage < total_Heath) && (hero_Damage < boss_Heath){
             
-            delegate?.fighting_Info( hero_Heath
-                , hero_Attack,  hero_Strength, hero_Ailge, level_Value, Double(40+((level_Value) * 110 )),  ((0.4 * Double(level_Value))*10),chance_Value)
-            
-        }else if hero_Heath_Value > boss_Heath_Value{
-            
-            ProgressHUD.showSuccess("You win!")
-            
-            delegate?.fighting_Info( hero_Heath
-                , hero_Attack,  hero_Strength, hero_Ailge, level_Value, Double(40+((level_Value+1) * 110 )),  ((0.4 * Double(level_Value)+1)*10),4)
+            perform(#selector(progress_Update), with: nil, afterDelay: 1)
         }
+        else if boss_Damage >= total_Heath{
+            ProgressHUD.showError("You lose!")
+            delegate?.fighting_Info( hero_Heath
+                           , hero_Attack,  hero_Strength, hero_Ailge, level_Value, boss_Heath,  boss_Attack,chance_Value)
+
+        }
+        else if boss_Heath <= hero_Damage{
+
+            ProgressHUD.showSuccess("You win!")
+            delegate?.fighting_Info( hero_Heath
+                           , hero_Attack,  hero_Strength, hero_Ailge, level_Value, boss_Heath, boss_Attack,4)
+        }
+
+        
+        
+        
+        
+        
+        
+//        if boss_Heath_Value > hero_Heath_Value{
+//            ProgressHUD.showError("You lose!")
+//
+//            delegate?.fighting_Info( hero_Heath
+//                , hero_Attack,  hero_Strength, hero_Ailge, level_Value, Double(50+(level_Value * 90 )),  ((0.2 * Double(level_Value))*10),chance_Value)
+//
+//        }else if hero_Heath_Value > boss_Heath_Value{
+//
+//            ProgressHUD.showSuccess("You win!")
+//
+//            delegate?.fighting_Info( hero_Heath
+//                , hero_Attack,  hero_Strength, hero_Ailge, level_Value, Double(50+(level_Value * 90 )),  ((0.4 * Double(level_Value)+1)*10),4)
+//        }
         
     }
     /*

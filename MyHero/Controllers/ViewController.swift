@@ -71,7 +71,7 @@ class ViewController: UIViewController {
         
         
         chance_Label.frame = CGRect(x: 10, y: hero.frame.origin.y+fullHeight/9*2, width: oneOfFourth, height: 50)
-        chance_Label.text = "Chance : \(upgrade_chance)"
+        chance_Label.text = " Chance : \(upgrade_chance)"
         view.addSubview(chance_Label)
         
         
@@ -149,15 +149,20 @@ class ViewController: UIViewController {
     }
     @objc func addValue(_ sender: UIButton){
         if upgrade_chance > 0{
+             upgrade_chance -= 1
         switch (sender.tag) {
         case 4 :  ailge_Value += 0.1; ailge_Label.text = "Ailge: "+String(format: "%.1f", ailge_Value)
+        chance_Label.text = " Chance : \(upgrade_chance)"
         case 1 :  heath_Value += 10; heath_Label.text = "Heath : \(heath_Value)"
+        chance_Label.text = " Chance : \(upgrade_chance)"
         case 3 :  strength_Value += 0.1; strength_Label.text = "Strength: "+String(format: "%.1f", strength_Value)
+        chance_Label.text = " Chance : \(upgrade_chance)"
         case 2 :  attack_Value += 1; attack_Label.text = "Attack : \(attack_Value)"
+        chance_Label.text = " Chance : \(upgrade_chance)"
         default:
             fatalError()
             }
-            upgrade_chance -= 1
+           
         }else{
             
             let alert = UIAlertController(title: "Reminder", message: "You don't have any chance to upgrade", preferredStyle: .alert)
@@ -172,10 +177,17 @@ class ViewController: UIViewController {
         switch (sender.tag){
         case 1 :
             run_Timer()
-        case 2 :
-            performSegue(withIdentifier: "goToBoss", sender: self)
-            let boss_Controller = FightBossController()
-            boss_Controller.setValue(heath_Value, attack_Value, strength_Value, ailge_Value, level_Value, upgrade_chance)
+        case 2 :performSegue(withIdentifier: "goToBoss", sender: self)
+            
+//            performSegue(withIdentifier: "goToBoss", sender: self)
+//            let boss_Controller = FightBossController()
+//            boss_Controller.hero_Heath = heath_Value
+//            boss_Controller.hero_Attack = attack_Value
+//            boss_Controller.hero_Strength = strength_Value
+//            boss_Controller.hero_Ailge = ailge_Value
+//            boss_Controller.level_Value = level_Value
+//            boss_Controller.chance_Value = upgrade_chance
+//            boss_Controller.setValue(heath_Value, attack_Value, strength_Value, ailge_Value, level_Value, upgrade_chance)
         case 3 : performSegue(withIdentifier: "goToStore", sender: self)
         case 4 : fatalError()
         default:
@@ -183,6 +195,19 @@ class ViewController: UIViewController {
         }
         
         
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToBoss"{
+            
+            let boss_Controller = segue.destination as! FightBossController
+//            boss_Controller.delegate = self
+            boss_Controller.hero_Heath = heath_Value
+            boss_Controller.hero_Attack = attack_Value
+            boss_Controller.hero_Strength = strength_Value
+            boss_Controller.hero_Ailge = ailge_Value
+            boss_Controller.level_Value = self.level_Value
+            boss_Controller.chance_Value = upgrade_chance
+        }
     }
     func run_Timer(){
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(update_Timer), userInfo: nil, repeats: true)
