@@ -12,20 +12,27 @@ import ProgressHUD
 protocol fight{
     
     func fighting_Info(_ heath : Int,_ attack : Int,_ strength : Double,_ agile : Double,
-                      _ level : Int, _ bossHeath : Double, _ bossAttack : Double , _ chance : Int)
+                       _ level : Int, _ random_Number : Int , _ chance : Int)
 }
 
 class FightBossController: UIViewController {
 
     
-    private var boss_image = UIImageView.init()
-     var delegate : fight?
+    private let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Info.plist")
+    
+   
+    var delegate : fight?
     var hero_Heath : Int = 0
     var hero_Attack : Int = 0
     var hero_Strength : Double = 0.0
     var hero_Ailge : Double = 0.0
     var level_Value : Int = 1
     var chance_Value : Int = 0
+    var random_Number : Int = 0
+    
+    
+    private var array: [Int] = []
+    private var boss_image = UIImageView.init()
     private var boss_Heath : Double = 0
     private var boss_Attack : Double = 0
     private var boss_Damage = 0.0
@@ -39,7 +46,6 @@ class FightBossController: UIViewController {
         
         boss_Image_function()
         setting()
-        progress_Start()
         // Do any additional setup after loading the view.
     }
     
@@ -97,29 +103,11 @@ class FightBossController: UIViewController {
             boss_Attack = ((0.2 * Double(level_Value))*10)+10
         }
     }
-    func setValue(_ heath: Int, _ attack: Int, _ strength: Double, _ ailge: Double, _ level: Int, _ chance: Int ){
-        
-        hero_Heath = heath
-        hero_Attack = attack
-        hero_Strength = strength
-        hero_Ailge = ailge
-        level_Value = level
-        chance_Value = chance
-    }
-    func progress_Start(){
-        
-        
-        
-        
-        
-    }
     @objc func progress_Update(){
         
         
         let total_Heath = (Double(hero_Heath) * hero_Strength)
         let total_Attack = (Double(hero_Attack) * hero_Ailge)
-//        let hero_Heath_Value =  total_Heath / boss_Attack
-//        let boss_Heath_Value = boss_Heath / total_Attack
         boss_Damage = boss_Damage + boss_Attack
         hero_Damage = hero_Damage + total_Attack
         
@@ -130,48 +118,69 @@ class FightBossController: UIViewController {
             
             perform(#selector(progress_Update), with: nil, afterDelay: 1)
         }
+        else if boss_Heath <= hero_Damage{
+            
+            ProgressHUD.showSuccess("You win!")
+            
+            load_Items()
+            
+            random_Number = Int.random(in: 1...10000)
+            array.append(random_Number)
+            
+            
+            delegate?.fighting_Info( hero_Heath
+                , hero_Attack,  hero_Strength, hero_Ailge, level_Value+1, random_Number ,5)
+            item()
+        }
         else if boss_Damage >= total_Heath{
             ProgressHUD.showError("You lose!")
             delegate?.fighting_Info( hero_Heath
-                           , hero_Attack,  hero_Strength, hero_Ailge, level_Value, boss_Heath,  boss_Attack,chance_Value)
+                           , hero_Attack,  hero_Strength, hero_Ailge, level_Value, 0 ,chance_Value)
 
         }
-        else if boss_Heath <= hero_Damage{
-
-            ProgressHUD.showSuccess("You win!")
-            delegate?.fighting_Info( hero_Heath
-                           , hero_Attack,  hero_Strength, hero_Ailge, level_Value, boss_Heath, boss_Attack,4)
+        
+        
+    }
+    func item(){
+        
+        let encoder = PropertyListEncoder()
+        let new_Item = Info()
+        new_Item.heath = hero_Heath
+        new_Item.attack = hero_Attack
+        new_Item.agile = hero_Ailge
+        new_Item.strength = hero_Strength
+        new_Item.level = level_Value+1
+        new_Item.chance = 5
+        new_Item.numbers = array
+        
+        
+        do{
+            let data = try encoder.encode(new_Item)
+            
+            try data.write(to: filePath!)
+            
+        }catch{
+            print("Error with saving, \(error)")
         }
-
-        
-        
-        
-        
-        
-        
-//        if boss_Heath_Value > hero_Heath_Value{
-//            ProgressHUD.showError("You lose!")
-//
-//            delegate?.fighting_Info( hero_Heath
-//                , hero_Attack,  hero_Strength, hero_Ailge, level_Value, Double(50+(level_Value * 90 )),  ((0.2 * Double(level_Value))*10),chance_Value)
-//
-//        }else if hero_Heath_Value > boss_Heath_Value{
-//
-//            ProgressHUD.showSuccess("You win!")
-//
-//            delegate?.fighting_Info( hero_Heath
-//                , hero_Attack,  hero_Strength, hero_Ailge, level_Value, Double(50+(level_Value * 90 )),  ((0.4 * Double(level_Value)+1)*10),4)
-//        }
-        
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func load_Items(){
+        
+        if let data = try? Data(contentsOf: filePath!){
+            let decoder = PropertyListDecoder()
+            
+            do{
+                let new_data : Info = try decoder.decode(Info.self, from: data)
+                hero_Heath = new_data.heath
+                hero_Ailge = new_data.agile
+                hero_Attack = new_data.attack
+                hero_Strength = new_data.strength
+                level_Value = new_data.level
+                chance_Value = new_data.chance
+                array = new_data.numbers
+            }catch{
+                print("Error \(error)")
+            }
+        }
     }
-    */
 
 }

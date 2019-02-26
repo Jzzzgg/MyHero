@@ -9,8 +9,10 @@
 import UIKit
 import ProgressHUD
 
-class ViewController: UIViewController {
+class ViewController: UIViewController,fight {
     
+    
+
     private var heath_Value : Int = 100
     private var attack_Value : Int = 10
     private var strength_Value : Double = 1.0
@@ -28,14 +30,21 @@ class ViewController: UIViewController {
     private var crit_Label = UILabel.init()
     private var level_Label = UILabel.init()
     private var chance_Label = UILabel.init()
+    private var number_Array: [Int] = []
     
+    
+    private let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Info.plist")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setting()
+        
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first)
+
         // Do any additional setup after loading the view, typically from a nib.
     }
     func setting(){
+        
         
         let fullWidth = self.view.frame.size.width
         let fullHeight = self.view.frame.size.height
@@ -46,6 +55,7 @@ class ViewController: UIViewController {
         let oneOfFourth = fullWidth/4
         let oneOfFifty = fullWidth/5
         
+        load_Items()
         
         let background = UIImageView.init(frame: CGRect(x: 0, y: 0, width: fullWidth, height: fullHeight))
         background.image = UIImage(named: "travel.png")
@@ -76,11 +86,11 @@ class ViewController: UIViewController {
         
         
         strength_Label.frame = CGRect(x: hero.frame.origin.x+fullWidth/3+10, y: hero.frame.origin.y, width: fullWidth/4, height: 50)
-        strength_Label.text = "Strength : \(strength_Value)"
+        strength_Label.text = "Strength: "+String(format: "%.1f", strength_Value)
         view.addSubview(strength_Label)
         
         ailge_Label.frame = CGRect(x: hero.frame.origin.x+fullWidth/3+10, y: hero.frame.origin.y+fullHeight/9, width: fullWidth/4, height: 50)
-        ailge_Label.text = "Alige : \(ailge_Value)"
+        ailge_Label.text = "Agile: "+String(format: "%.1f", ailge_Value)
         view.addSubview(ailge_Label)
         
         crit_Label.frame =  CGRect(x: hero.frame.origin.x+fullWidth/3+10, y: hero.frame.origin.y+fullHeight/9*2, width: fullWidth/4, height: 50)
@@ -151,14 +161,14 @@ class ViewController: UIViewController {
         if upgrade_chance > 0{
              upgrade_chance -= 1
         switch (sender.tag) {
-        case 4 :  ailge_Value += 0.1; ailge_Label.text = "Ailge: "+String(format: "%.1f", ailge_Value)
-        chance_Label.text = " Chance : \(upgrade_chance)"
-        case 1 :  heath_Value += 10; heath_Label.text = "Heath : \(heath_Value)"
-        chance_Label.text = " Chance : \(upgrade_chance)"
+        case 4 :  ailge_Value += 0.1; ailge_Label.text = "Agile: "+String(format: "%.1f", ailge_Value)
+        chance_Label.text = " Chance : \(upgrade_chance)";save_Items()
+        case 1 :  heath_Value += 20; heath_Label.text = "Heath : \(heath_Value)"
+        chance_Label.text = " Chance : \(upgrade_chance)";save_Items()
         case 3 :  strength_Value += 0.1; strength_Label.text = "Strength: "+String(format: "%.1f", strength_Value)
-        chance_Label.text = " Chance : \(upgrade_chance)"
-        case 2 :  attack_Value += 1; attack_Label.text = "Attack : \(attack_Value)"
-        chance_Label.text = " Chance : \(upgrade_chance)"
+        chance_Label.text = " Chance : \(upgrade_chance)";save_Items()
+        case 2 :  attack_Value += 2; attack_Label.text = "Attack : \(attack_Value)"
+        chance_Label.text = " Chance : \(upgrade_chance)";save_Items()
         default:
             fatalError()
             }
@@ -178,18 +188,14 @@ class ViewController: UIViewController {
         case 1 :
             run_Timer()
         case 2 :performSegue(withIdentifier: "goToBoss", sender: self)
-            
-//            performSegue(withIdentifier: "goToBoss", sender: self)
-//            let boss_Controller = FightBossController()
-//            boss_Controller.hero_Heath = heath_Value
-//            boss_Controller.hero_Attack = attack_Value
-//            boss_Controller.hero_Strength = strength_Value
-//            boss_Controller.hero_Ailge = ailge_Value
-//            boss_Controller.level_Value = level_Value
-//            boss_Controller.chance_Value = upgrade_chance
-//            boss_Controller.setValue(heath_Value, attack_Value, strength_Value, ailge_Value, level_Value, upgrade_chance)
         case 3 : performSegue(withIdentifier: "goToStore", sender: self)
-        case 4 : fatalError()
+        case 4 :
+            let pop_Up = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "openBag") as! PopUPViewController
+            self.addChild(pop_Up)
+            pop_Up.view.frame = self.view.frame
+            self.view.addSubview(pop_Up.bag)
+            pop_Up.didMove(toParent: self)
+            
         default:
             fatalError()
         }
@@ -200,7 +206,7 @@ class ViewController: UIViewController {
         if segue.identifier == "goToBoss"{
             
             let boss_Controller = segue.destination as! FightBossController
-//            boss_Controller.delegate = self
+            boss_Controller.delegate = self
             boss_Controller.hero_Heath = heath_Value
             boss_Controller.hero_Attack = attack_Value
             boss_Controller.hero_Strength = strength_Value
@@ -211,6 +217,7 @@ class ViewController: UIViewController {
     }
     func run_Timer(){
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(update_Timer), userInfo: nil, repeats: true)
+        small_Button.setTitle(" Time : \(time)", for: .normal)
         
     }
     @objc func update_Timer()
@@ -226,11 +233,16 @@ class ViewController: UIViewController {
             small_Button.isEnabled = true
             upgrade_chance += 1
             
+            
             ProgressHUD.showSuccess("Add one chance to upgrade! Chance : \(upgrade_chance)")
-
+            chance_Label.text = " Chance : \(upgrade_chance)"
+            save_Items()
+            reload_Data()
         }
+        
+        
     }
-     func fighting_Info(_ heath: Int, _ attack: Int, _ strength: Double, _ ailge: Double, _ level: Int, _ bossHeath : Double, _ bossAttack : Double,_ chance : Int) {
+    func fighting_Info(_ heath: Int, _ attack: Int, _ strength: Double, _ ailge: Double, _ level: Int,_ random_Number: Int,_ chance : Int) {
         
         heath_Value = heath
         attack_Value = attack
@@ -238,13 +250,66 @@ class ViewController: UIViewController {
         ailge_Value = ailge
         level_Value = level
         upgrade_chance = chance
+        if random_Number != 0 {
+            number_Array.append(random_Number)
+        }
+        
+        level_Label.text = " Level : \(level_Value)"
+        
+        
+        print("\(heath)")
+        
+        reload_Data()
+        
+        
+    }
+    func save_Items(){
+        
+        let encoder = PropertyListEncoder()
+      
+        let new_Item = Info()
+        new_Item.agile = ailge_Value
+        new_Item.heath = heath_Value
+        new_Item.attack = attack_Value
+        new_Item.strength = strength_Value
+        new_Item.level = level_Value
+        new_Item.chance = upgrade_chance
+        new_Item.numbers = number_Array
+        
+        do{
+            let data = try encoder.encode(new_Item)
+            
+            try data.write(to: filePath!)
+            
+        }catch{
+            print("Error with saving, \(error)")
+        }
+    }
+    func load_Items(){
+        
+        if let data = try? Data(contentsOf: filePath!){
+            let decoder = PropertyListDecoder()
+            
+            do{
+                let new_data : Info = try decoder.decode(Info.self, from: data)
+                heath_Value = new_data.heath
+                ailge_Value = new_data.agile
+                attack_Value = new_data.attack
+                strength_Value = new_data.strength
+                level_Value = new_data.level
+                upgrade_chance = new_data.chance
+                number_Array = new_data.numbers
+            }catch{
+                print("Error \(error)")
+            }
+        }
+    }
+    func reload_Data(){
         
         let parent = view.superview
         view.removeFromSuperview()
         view = nil
         parent?.addSubview(view)
-        
-        
     }
     
     

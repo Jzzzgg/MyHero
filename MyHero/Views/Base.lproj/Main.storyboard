@@ -60,6 +60,21 @@
             </objects>
             <point key="canvasLocation" x="1684" y="-852"/>
         </scene>
+        <!--PopUP View Controller-->
+        <scene sceneID="GBR-qb-geb">
+            <objects>
+                <viewController storyboardIdentifier="openBag" id="Eog-kN-2v1" customClass="PopUPViewController" customModule="MyHero" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="4nW-uP-mEZ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="kAd-p2-Rnm"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="09Z-Zo-M3Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2514" y="-857"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="0kb-Sy-RFg">
             <objects>

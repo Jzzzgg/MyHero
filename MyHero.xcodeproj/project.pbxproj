@@ -12,6 +12,9 @@
 		767CC8C5221E381000C911A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 767CC8C3221E381000C911A8 /* Main.storyboard */; };
 		767CC8C7221E381100C911A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 767CC8C6221E381100C911A8 /* Assets.xcassets */; };
 		767CC8CA221E381100C911A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 767CC8C8221E381100C911A8 /* LaunchScreen.storyboard */; };
+		964E454722245E4A00090237 /* PopUPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964E454622245E4A00090237 /* PopUPViewController.swift */; };
+		964E45492224C6CA00090237 /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964E45482224C6CA00090237 /* Info.swift */; };
+		964E454C2224F4E900090237 /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964E454B2224F4E900090237 /* SwipeTableViewController.swift */; };
 		96991F8322224C5E00A57BBB /* FightBossController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96991F8222224C5E00A57BBB /* FightBossController.swift */; };
 		96991F8522224E0600A57BBB /* StoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96991F8422224E0600A57BBB /* StoreController.swift */; };
 		B42F018224FA428547DD2333 /* Pods_MyHero.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7884B5D13F518584B438480 /* Pods_MyHero.framework */; };
@@ -25,6 +28,9 @@
 		767CC8C6221E381100C911A8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		767CC8C9221E381100C911A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		767CC8CB221E381100C911A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		964E454622245E4A00090237 /* PopUPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUPViewController.swift; sourceTree = "<group>"; };
+		964E45482224C6CA00090237 /* Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Info.swift; path = "MyHero/New Group/Info.swift"; sourceTree = SOURCE_ROOT; };
+		964E454B2224F4E900090237 /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		96991F8222224C5E00A57BBB /* FightBossController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FightBossController.swift; sourceTree = "<group>"; };
 		96991F8422224E0600A57BBB /* StoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreController.swift; sourceTree = "<group>"; };
 		96A8BCAB2222F6FE002D3F16 /* Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
@@ -77,6 +83,7 @@
 			children = (
 				96A8BCAB2222F6FE002D3F16 /* Header.h */,
 				767CC8BF221E381000C911A8 /* AppDelegate.swift */,
+				964E454A2224C6DB00090237 /* Model */,
 				96A8BCA92222D951002D3F16 /* Controllers */,
 				96A8BCAA2222D97B002D3F16 /* Views */,
 				767CC8C6221E381100C911A8 /* Assets.xcassets */,
@@ -86,9 +93,20 @@
 			path = MyHero;
 			sourceTree = "<group>";
 		};
+		964E454A2224C6DB00090237 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				964E45482224C6CA00090237 /* Info.swift */,
+			);
+			name = Model;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		96A8BCA92222D951002D3F16 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				964E454B2224F4E900090237 /* SwipeTableViewController.swift */,
+				964E454622245E4A00090237 /* PopUPViewController.swift */,
 				96991F8422224E0600A57BBB /* StoreController.swift */,
 				96991F8222224C5E00A57BBB /* FightBossController.swift */,
 				767CC8C1221E381000C911A8 /* ViewController.swift */,
@@ -190,17 +208,19 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-MyHero/Pods-MyHero-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/JGProgressHUD/JGProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/ProgressHUD/ProgressHUD.framework",
-				"${BUILT_PRODUCTS_DIR}/YLProgressBar/YLProgressBar.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JGProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProgressHUD.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YLProgressBar.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeCellKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -237,8 +257,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				767CC8C2221E381000C911A8 /* ViewController.swift in Sources */,
+				964E45492224C6CA00090237 /* Info.swift in Sources */,
 				96991F8322224C5E00A57BBB /* FightBossController.swift in Sources */,
+				964E454C2224F4E900090237 /* SwipeTableViewController.swift in Sources */,
 				767CC8C0221E381000C911A8 /* AppDelegate.swift in Sources */,
+				964E454722245E4A00090237 /* PopUPViewController.swift in Sources */,
 				96991F8522224E0600A57BBB /* StoreController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
