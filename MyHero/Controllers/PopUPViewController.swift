@@ -13,9 +13,10 @@ import SwipeCellKit
 
 class PopUPViewController:  UIViewController, UITableViewDataSource, UITableViewDelegate ,SwipeTableViewCellDelegate{
     
-    
+    var selected_Item = Equipment()
     var hero_Heath : Int = 0
     var hero_Attack : Int = 0
+    var hero_Crit : Double = 0.0
     var hero_Strength : Double = 0.0
     var hero_Ailge : Double = 0.0
     var level_Value : Int = 1
@@ -56,10 +57,26 @@ class PopUPViewController:  UIViewController, UITableViewDataSource, UITableView
             self.save_Items()
         }
         let addAction = SwipeAction(style: .destructive, title: "Add") { action, indexPath in
-            self.equipment.append(self.new_Equ)
-            print("xxx")
+            
+            let x = ViewController()
+           
+                self.hero_Heath -= self.selected_Item.e_Heath
+                self.hero_Ailge -= self.selected_Item.e_Agile
+                self.hero_Attack -= self.selected_Item.e_Attack
+                self.hero_Strength -= self.selected_Item.e_Strength
+                self.hero_Crit  -= self.selected_Item.e_Crit
+                self.selected_Item = self.equipment[indexPath.row]
+                
+                self.hero_Heath += self.selected_Item.e_Heath
+                self.hero_Ailge += self.selected_Item.e_Agile
+                self.hero_Attack += self.selected_Item.e_Attack
+                self.hero_Strength += self.selected_Item.e_Strength
+                self.hero_Crit  += self.selected_Item.e_Crit
+                
+            
             self.table.reloadData()
             self.save_Items()
+            self.load_Numbers()
         }
         
         // customize the action appearance
@@ -126,7 +143,7 @@ class PopUPViewController:  UIViewController, UITableViewDataSource, UITableView
     @objc func close_Function()
     {
         self.bag.removeFromSuperview()
-
+     
     }
     func load_Numbers(){
        
@@ -137,6 +154,7 @@ class PopUPViewController:  UIViewController, UITableViewDataSource, UITableView
                 let new_data : Info = try decoder.decode(Info.self, from: data)
 //                numbers = new_data.numbers
                 gold_Value = new_data.gold
+                selected_Item = new_data.selected_Item
                 equipment = new_data.equ
                 
             }catch{
@@ -170,6 +188,8 @@ class PopUPViewController:  UIViewController, UITableViewDataSource, UITableView
         new_Item.strength = hero_Strength
         new_Item.level = level_Value
         new_Item.chance = chance_Value
+        new_Item.crit = hero_Crit
+        new_Item.selected_Item = selected_Item
         new_Item.gold = gold_Value
         new_Item.equ = equipment
 //        new_Item.numbers = numbers

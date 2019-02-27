@@ -9,29 +9,30 @@
 import UIKit
 import ProgressHUD
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,fight {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return equipment.count
-    }
+class ViewController: UIViewController, fight {
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return equipment.count
+//    }
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+//        cell.textLabel?.text = equipment[indexPath.row].e_Name
+//        return cell
+//    }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = equipment[indexPath.row].e_Name
-        return cell
-    }
     
     
-    
-
-    private var heath_Value : Int = 100
-    private var attack_Value : Int = 10
-    private var strength_Value : Double = 1.0
-    private var ailge_Value : Double = 1.0
+    var crit_Value : Double = 0.0
+    var heath_Value : Int = 100
+    var attack_Value : Int = 10
+    var strength_Value : Double = 1.0
+    var ailge_Value : Double = 1.0
     private var level_Value : Int = 1
     private var gold_Value : Int = 100000
     private var upgrade_chance : Int = 5
     private var time = 30
     private var timer = Timer()
+    private var select_Item = Equipment()
     
     private var small_Button = UIButton.init()
     private var heath_Label = UILabel.init()
@@ -43,7 +44,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     private var chance_Label = UILabel.init()
     private var number_Array: [Int] = []
     private var equipment : [Equipment] = []
-    private var table: UITableView!
+    var selected_Equ = UILabel.init()
 
     
     
@@ -108,7 +109,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         view.addSubview(ailge_Label)
         
         crit_Label.frame =  CGRect(x: hero.frame.origin.x+fullWidth/3+10, y: hero.frame.origin.y+fullHeight/9*2, width: fullWidth/4, height: 50)
-        crit_Label.text = "Crit : 0.0"
+        crit_Label.text = "Crit : \(crit_Value)"
         view.addSubview(crit_Label)
         
         let heath_Button = UIButton(frame: CGRect(x: oneOfFifty/5, y: crit_Label.frame.origin.y+50, width: oneOfFifty, height: 50))
@@ -168,14 +169,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.view.addSubview(store_Label)
         
         
-        table = UITableView.init(frame: CGRect(x: 0, y: Ailge_Button.frame.maxY, width: fullWidth, height: 400))
-        table.delegate = self
-        table.dataSource = self
-        table.separatorStyle = .none
-        table.rowHeight = 80
-        table.backgroundColor = UIColor.lightGray
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        view.addSubview(table)
+        selected_Equ = UILabel.init(frame: CGRect(x: 0, y: Ailge_Button.frame.maxY, width: fullWidth, height: 100))
+        selected_Equ.text = " Selected Item : \(select_Item.e_Name)"
+        selected_Equ.numberOfLines = 0
+        view.addSubview(selected_Equ)
+//        table.delegate = self
+//        table.dataSource = self
+//        table.separatorStyle = .none
+//        table.rowHeight = 80
+//        table.backgroundColor = UIColor.lightGray
+//        table.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+//        view.addSubview(table)
         
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(goToButton))
@@ -223,6 +227,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             pop_Up.hero_Ailge = ailge_Value
             pop_Up.level_Value = self.level_Value
             pop_Up.chance_Value = upgrade_chance
+            pop_Up.hero_Crit = crit_Value
+            pop_Up.selected_Item = select_Item
             pop_Up.gold_Value = self.gold_Value
 //            pop_Up.numbers = number_Array
             pop_Up.equipment = self.equipment
@@ -245,6 +251,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             boss_Controller.hero_Attack = attack_Value
             boss_Controller.hero_Strength = strength_Value
             boss_Controller.hero_Ailge = ailge_Value
+            boss_Controller.hero_Crit = crit_Value
+            boss_Controller.selected_Item = select_Item
             boss_Controller.gold_Value = self.gold_Value
             boss_Controller.equipment = self.equipment
             boss_Controller.level_Value = self.level_Value
@@ -258,7 +266,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             store_Controller.hero_Attack = attack_Value
             store_Controller.hero_Strength = strength_Value
             store_Controller.hero_Ailge = ailge_Value
+            store_Controller.hero_Crit = crit_Value
             store_Controller.equipment = self.equipment
+            store_Controller.selected_Item = select_Item
             store_Controller.gold_Value = self.gold_Value
             store_Controller.level_Value = self.level_Value
             store_Controller.chance_Value = upgrade_chance
@@ -291,7 +301,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         
     }
-    func fighting_Info(_ heath: Int, _ attack: Int, _ strength: Double, _ ailge: Double, _ level: Int,_ random_Number: Int, _ gold: Int,_ equi : [Equipment],_ chance : Int) {
+    func fighting_Info(_ heath: Int, _ attack: Int, _ strength: Double, _ ailge: Double, _ level: Int,_ random_Number: Int, _ gold: Int,_ equi : [Equipment],_ selected_Item : Equipment ,_ crit: Double ,_ chance : Int) {
         
         heath_Value = heath
         attack_Value = attack
@@ -299,6 +309,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         ailge_Value = ailge
         level_Value = level
         gold_Value = gold
+        crit_Value = crit
+        select_Item = selected_Item
         equipment = equi
         upgrade_chance = chance
         if random_Number != 0 {
@@ -325,6 +337,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         new_Item.strength = strength_Value
         new_Item.level = level_Value
         new_Item.gold = gold_Value
+        new_Item.crit = crit_Value
+        new_Item.selected_Item = select_Item
         new_Item.equ = equipment
         new_Item.chance = upgrade_chance
 //        new_Item.numbers = number_Array
@@ -350,8 +364,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 attack_Value = new_data.attack
                 strength_Value = new_data.strength
                 level_Value = new_data.level
+                crit_Value = new_data.crit
                 upgrade_chance = new_data.chance
                 gold_Value = new_data.gold
+                select_Item = new_data.selected_Item
                 equipment = new_data.equ
 //                number_Array = new_data.numbers
             }catch{
@@ -360,7 +376,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     func reload_Data(){
-        
+        load_Items()
         let parent = view.superview
         view.removeFromSuperview()
         view = nil
@@ -373,8 +389,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         strength_Value = 1.0
         level_Value = 1
         upgrade_chance = 5
+        crit_Value = 0.0
         gold_Value = 10000
+        select_Item = Equipment()
         equipment = []
+        
         save_Items()
         reload_Data()
     }

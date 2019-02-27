@@ -11,11 +11,13 @@ import ProgressHUD
 
 class StoreController: UIViewController {
 
+    var selected_Item = Equipment()
     var hero_Heath : Int = 0
     var hero_Attack : Int = 0
     var hero_Strength : Double = 0.0
     var hero_Ailge : Double = 0.0
     var level_Value : Int = 1
+    var hero_Crit : Double = 0.0
     var chance_Value : Int = 0
     var gold_Value : Int = 0
     var equipment : [Equipment] = []
@@ -173,6 +175,8 @@ class StoreController: UIViewController {
                 hero_Strength = new_data.strength
                 level_Value = new_data.level
                 chance_Value = new_data.chance
+                hero_Crit = new_data.crit
+                selected_Item = new_data.selected_Item
                 gold_Value = new_data.gold
                 equipment = new_data.equ
 //                array = new_data.numbers
@@ -189,7 +193,9 @@ class StoreController: UIViewController {
         new_Item.attack = hero_Attack
         new_Item.agile = hero_Ailge
         new_Item.strength = hero_Strength
-        new_Item.level = level_Value+1
+        new_Item.selected_Item = selected_Item
+        new_Item.level = level_Value
+        new_Item.crit = hero_Crit
         new_Item.chance = chance_Value
         new_Item.gold = gold_Value
         new_Item.equ = equipment

@@ -16,6 +16,8 @@ class Info: Codable {
     var strength : Double = 1.0
     var level : Int = 1
     var chance : Int = 5
+    var crit : Double = 0.0
+    var selected_Item = Equipment()
     var gold : Int = 0
     var numbers : [Int] = []
     var equ : [Equipment] = []

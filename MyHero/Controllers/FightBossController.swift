@@ -12,7 +12,7 @@ import ProgressHUD
 protocol fight{
     
     func fighting_Info(_ heath : Int,_ attack : Int,_ strength : Double,_ agile : Double,
-                       _ level : Int, _ random_Number : Int ,_ gold: Int, _ equi : [Equipment], _ chance : Int)
+                       _ level : Int, _ random_Number : Int ,_ gold: Int, _ equi : [Equipment], _ selected_Item: Equipment, _ cirt : Double , _ chance : Int)
 }
 
 class FightBossController: UIViewController {
@@ -20,7 +20,7 @@ class FightBossController: UIViewController {
     
     private let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Info.plist")
     
-   
+    var selected_Item = Equipment()
     var delegate : fight?
     var hero_Heath : Int = 0
     var hero_Attack : Int = 0
@@ -29,6 +29,7 @@ class FightBossController: UIViewController {
     var level_Value : Int = 1
     var chance_Value : Int = 0
     var random_Number : Int = 0
+    var hero_Crit : Double = 0.0
     var equipment : [Equipment] = []
     var gold_Value : Int = 0
     var new_Equ = Equipment()
@@ -132,14 +133,14 @@ class FightBossController: UIViewController {
             
             
             delegate?.fighting_Info( hero_Heath
-                , hero_Attack,  hero_Strength, hero_Ailge, level_Value+1, random_Number , gold_Value, equipment ,5)
+                , hero_Attack,  hero_Strength, hero_Ailge, level_Value+1, random_Number , gold_Value, equipment , selected_Item,hero_Crit,chance_Value+5)
             item()
             
         }
         else if boss_Damage >= total_Heath{
             ProgressHUD.showError("You lose!")
             delegate?.fighting_Info( hero_Heath
-                           , hero_Attack,  hero_Strength, hero_Ailge, level_Value, 0 , gold_Value , equipment ,chance_Value)
+                           , hero_Attack,  hero_Strength, hero_Ailge, level_Value, 0 , gold_Value , equipment, selected_Item , hero_Crit,chance_Value)
 
         }
         
@@ -155,6 +156,8 @@ class FightBossController: UIViewController {
         new_Item.strength = hero_Strength
         new_Item.level = level_Value+1
         new_Item.chance = 5
+        new_Item.crit = hero_Crit
+        new_Item.selected_Item = selected_Item
         new_Item.equ = equipment
         new_Item.gold = gold_Value
 //        new_Item.numbers = array
@@ -182,7 +185,9 @@ class FightBossController: UIViewController {
                 hero_Strength = new_data.strength
                 level_Value = new_data.level
                 chance_Value = new_data.chance
+                hero_Crit = new_data.crit
                 gold_Value = new_data.gold
+                selected_Item = new_data.selected_Item
                 equipment = new_data.equ
 //                array = new_data.numbers
             }catch{
