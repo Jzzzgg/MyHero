@@ -9,13 +9,16 @@
 import Foundation
 
 class Info: Codable {
+    
     var heath : Int = 100
     var attack : Int = 10
     var agile : Double = 1.0
     var strength : Double = 1.0
     var level : Int = 1
     var chance : Int = 5
+    var gold : Int = 0
     var numbers : [Int] = []
+    var equ : [Equipment] = []
 }
 
 

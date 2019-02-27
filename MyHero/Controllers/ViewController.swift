@@ -9,7 +9,17 @@
 import UIKit
 import ProgressHUD
 
-class ViewController: UIViewController,fight {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,fight {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return equipment.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        cell.textLabel?.text = equipment[indexPath.row].e_Name
+        return cell
+    }
+    
     
     
 
@@ -18,8 +28,9 @@ class ViewController: UIViewController,fight {
     private var strength_Value : Double = 1.0
     private var ailge_Value : Double = 1.0
     private var level_Value : Int = 1
+    private var gold_Value : Int = 100000
     private var upgrade_chance : Int = 5
-    private var time = 60
+    private var time = 30
     private var timer = Timer()
     
     private var small_Button = UIButton.init()
@@ -31,6 +42,9 @@ class ViewController: UIViewController,fight {
     private var level_Label = UILabel.init()
     private var chance_Label = UILabel.init()
     private var number_Array: [Int] = []
+    private var equipment : [Equipment] = []
+    private var table: UITableView!
+
     
     
     private let filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Info.plist")
@@ -49,7 +63,7 @@ class ViewController: UIViewController,fight {
         let fullWidth = self.view.frame.size.width
         let fullHeight = self.view.frame.size.height
         let halfWidth = fullWidth/2
-        let halfHeight = fullHeight/2
+//        let halfHeight = fullHeight/2
         let oneOfThridWidth = fullWidth/3
         let oneOfThridHeight = fullHeight/3
         let oneOfFourth = fullWidth/4
@@ -132,7 +146,7 @@ class ViewController: UIViewController,fight {
         small_Button = UIButton.init(frame: CGRect(x: 0, y: self.view.frame.size.height - 50, width: oneOfThridWidth, height: 50))
         small_Button.setTitle("Fight Monster", for: .normal)
         small_Button.setTitleColor(UIColor.black, for: .normal)
-        small_Button.backgroundColor = UIColor.lightGray
+        small_Button.backgroundColor = UIColor.gray
         small_Button.addTarget(self, action: #selector(goToButton), for: .touchUpInside)
         small_Button.tag = 1
         self.view.addSubview(small_Button)
@@ -140,7 +154,7 @@ class ViewController: UIViewController,fight {
         let large_Button = UIButton.init(frame: CGRect(x: fullWidth-oneOfThridWidth, y: self.view.frame.size.height - 50, width: oneOfThridWidth, height: 50))
         large_Button.setTitle("Fight Boss", for: .normal)
         large_Button.setTitleColor(UIColor.black, for: .normal)
-        large_Button.backgroundColor = UIColor.lightGray
+        large_Button.backgroundColor = UIColor.gray
         large_Button.addTarget(self, action: #selector(goToButton), for: .touchUpInside)
         large_Button.tag = 2
         self.view.addSubview(large_Button)
@@ -148,14 +162,25 @@ class ViewController: UIViewController,fight {
         let store_Label = UIButton.init(frame: CGRect(x: oneOfThridWidth, y: self.view.frame.height-50, width: oneOfThridWidth, height: 50))
         store_Label.setTitle("Store", for: .normal)
         store_Label.setTitleColor(UIColor.black, for: .normal)
-        store_Label.backgroundColor = UIColor.lightGray
+        store_Label.backgroundColor = UIColor.gray
         store_Label.addTarget(self, action: #selector(goToButton), for: .touchUpInside)
         store_Label.tag = 3
         self.view.addSubview(store_Label)
         
+        
+        table = UITableView.init(frame: CGRect(x: 0, y: Ailge_Button.frame.maxY, width: fullWidth, height: 400))
+        table.delegate = self
+        table.dataSource = self
+        table.separatorStyle = .none
+        table.rowHeight = 80
+        table.backgroundColor = UIColor.lightGray
+        table.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        view.addSubview(table)
+        
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(goToButton))
         navigationItem.rightBarButtonItem?.tag = 4
-        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .reply, target: self, action: #selector(reset))
     }
     @objc func addValue(_ sender: UIButton){
         if upgrade_chance > 0{
@@ -192,10 +217,19 @@ class ViewController: UIViewController,fight {
         case 4 :
             let pop_Up = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "openBag") as! PopUPViewController
             self.addChild(pop_Up)
+            pop_Up.hero_Heath = heath_Value
+            pop_Up.hero_Attack = attack_Value
+            pop_Up.hero_Strength = strength_Value
+            pop_Up.hero_Ailge = ailge_Value
+            pop_Up.level_Value = self.level_Value
+            pop_Up.chance_Value = upgrade_chance
+            pop_Up.gold_Value = self.gold_Value
+//            pop_Up.numbers = number_Array
+            pop_Up.equipment = self.equipment
             pop_Up.view.frame = self.view.frame
             self.view.addSubview(pop_Up.bag)
             pop_Up.didMove(toParent: self)
-            
+            load_Items()
         default:
             fatalError()
         }
@@ -211,10 +245,26 @@ class ViewController: UIViewController,fight {
             boss_Controller.hero_Attack = attack_Value
             boss_Controller.hero_Strength = strength_Value
             boss_Controller.hero_Ailge = ailge_Value
+            boss_Controller.gold_Value = self.gold_Value
+            boss_Controller.equipment = self.equipment
             boss_Controller.level_Value = self.level_Value
             boss_Controller.chance_Value = upgrade_chance
+            
         }
+        if segue.identifier == "goToStore"{
+        
+            let store_Controller = segue.destination as! StoreController
+            store_Controller.hero_Heath = heath_Value
+            store_Controller.hero_Attack = attack_Value
+            store_Controller.hero_Strength = strength_Value
+            store_Controller.hero_Ailge = ailge_Value
+            store_Controller.equipment = self.equipment
+            store_Controller.gold_Value = self.gold_Value
+            store_Controller.level_Value = self.level_Value
+            store_Controller.chance_Value = upgrade_chance
     }
+    }
+        
     func run_Timer(){
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(update_Timer), userInfo: nil, repeats: true)
         small_Button.setTitle(" Time : \(time)", for: .normal)
@@ -228,11 +278,10 @@ class ViewController: UIViewController,fight {
             small_Button.isEnabled = false
         }else{
             timer.invalidate()
-            time = 60
+            time = 30
             small_Button.setTitle("Fight Monster", for: .normal)
             small_Button.isEnabled = true
             upgrade_chance += 1
-            
             
             ProgressHUD.showSuccess("Add one chance to upgrade! Chance : \(upgrade_chance)")
             chance_Label.text = " Chance : \(upgrade_chance)"
@@ -242,13 +291,15 @@ class ViewController: UIViewController,fight {
         
         
     }
-    func fighting_Info(_ heath: Int, _ attack: Int, _ strength: Double, _ ailge: Double, _ level: Int,_ random_Number: Int,_ chance : Int) {
+    func fighting_Info(_ heath: Int, _ attack: Int, _ strength: Double, _ ailge: Double, _ level: Int,_ random_Number: Int, _ gold: Int,_ equi : [Equipment],_ chance : Int) {
         
         heath_Value = heath
         attack_Value = attack
         strength_Value = strength
         ailge_Value = ailge
         level_Value = level
+        gold_Value = gold
+        equipment = equi
         upgrade_chance = chance
         if random_Number != 0 {
             number_Array.append(random_Number)
@@ -273,8 +324,10 @@ class ViewController: UIViewController,fight {
         new_Item.attack = attack_Value
         new_Item.strength = strength_Value
         new_Item.level = level_Value
+        new_Item.gold = gold_Value
+        new_Item.equ = equipment
         new_Item.chance = upgrade_chance
-        new_Item.numbers = number_Array
+//        new_Item.numbers = number_Array
         
         do{
             let data = try encoder.encode(new_Item)
@@ -298,7 +351,9 @@ class ViewController: UIViewController,fight {
                 strength_Value = new_data.strength
                 level_Value = new_data.level
                 upgrade_chance = new_data.chance
-                number_Array = new_data.numbers
+                gold_Value = new_data.gold
+                equipment = new_data.equ
+//                number_Array = new_data.numbers
             }catch{
                 print("Error \(error)")
             }
@@ -311,7 +366,18 @@ class ViewController: UIViewController,fight {
         view = nil
         parent?.addSubview(view)
     }
-    
+    @objc func reset()  {
+        heath_Value = 100
+        ailge_Value = 1.0
+        attack_Value = 10
+        strength_Value = 1.0
+        level_Value = 1
+        upgrade_chance = 5
+        gold_Value = 10000
+        equipment = []
+        save_Items()
+        reload_Data()
+    }
     
     
 }
